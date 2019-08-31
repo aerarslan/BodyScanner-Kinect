@@ -1,0 +1,187 @@
+﻿<Window x:Class="BodyScanner.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:BodyScanner"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Scanner" Width="1000" Height="860" Closing="WindowClosing"  Top="0" Left="0" Icon="Images\bodyscan.ico" SizeChanged="Window_SizeChanged" IsVisibleChanged="Window_IsVisibleChanged">
+
+    <Window.Resources>
+
+        <l:DepthToTextConverter x:Key="dtt"/>
+
+        <Style x:Key="KinectTextFormat" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+
+        <DoubleAnimationUsingKeyFrames x:Key="AngleAnimation" RepeatBehavior="Forever">
+            <DiscreteDoubleKeyFrame Value="0" KeyTime="0:0:0"/>
+            <LinearDoubleKeyFrame Value="360" KeyTime="0:0:5"/>
+        </DoubleAnimationUsingKeyFrames>
+
+    </Window.Resources>
+
+    <Viewbox >
+        <Grid Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="929"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="CompositeHost" ClipToBounds="False" Margin="16,25,16,304" Background="Black" Width="960" Height="600" >
+                <Viewbox Grid.Column="0" Margin="0">
+                    <Image Name="shadedSurfaceImage"/>
+                </Viewbox>
+                <Viewport3D Name="GraphicsViewport" IsHitTestVisible="False" Margin="0" Width="960" Height="600" >
+                </Viewport3D>
+            </Grid>
+
+            <Grid Height="244" VerticalAlignment="Top" Margin="0,659,483,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="506"/>
+                </Grid.ColumnDefinitions>
+
+                <Border BorderBrush="Black" BorderThickness="2" Margin="0,5,314,0" Padding="0">
+                    <Grid Margin="-2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="224"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <CheckBox Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,91,0,116" Content="Capture Color" IsChecked="{Binding CaptureColor}" AutomationProperties.AutomationId="CaptureColor" Width="120" Height="18"/>
+                        <CheckBox Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,114,0,93" Content="Kinect View" IsChecked="{Binding KinectView}" AutomationProperties.AutomationId="KinectView" Width="120" Height="18"/>
+
+                        <StackPanel Background="Black" Margin="0,151,0,53" Height="19">
+                            <TextBlock Style="{StaticResource KinectTextFormat}" Foreground="White">Depth Threshold</TextBlock>
+                        </StackPanel>
+
+                        <Grid Height="62" VerticalAlignment="Top" Margin="0,172,0,-9">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="506"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock  Margin="5,10,475,34"><Run Text="Min"/></TextBlock>
+                            <Slider  SmallChange="0.02" LargeChange="1.5" Value="{Binding MinDepthClip}" Minimum="0.5" Maximum="8.0" Ticks="0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0" AutomationProperties.AutomationId="DepthThresholdMin" Margin="36,10,361,34"/>
+                            <TextBlock   Margin="5,34,475,7"><Run Text="Max"/></TextBlock>
+                            <TextBlock  Margin="150,10,318,34" Text="{Binding MinDepthClip, Converter={StaticResource dtt}}"/>
+                            <Slider  SmallChange="0.02" LargeChange="1.5" Value="{Binding MaxDepthClip}" Minimum="0.5" Maximum="8.0" Ticks="0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0" Margin="36,34,361,7" AutomationProperties.AutomationId="DepthThresholdMax"/>
+                            <TextBlock  Margin="150,34,318,7" Text="{Binding MaxDepthClip, Converter={StaticResource dtt}}"/>
+                        </Grid>
+                        <Button Margin="10,11,0,0"  Content="Start Mesh" Click="startButton_Click" AutomationProperties.AutomationId="ResetReconstruction" Width="172" Height="31" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                        <Button x:Name="stopButton" Content="Stop Integration" Margin="10,48,0,0" Width="172" Height="31" Click="stopButton_Click" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    </Grid>
+                </Border>
+
+                <Border BorderBrush="Black" BorderThickness="2" MinWidth="210" Margin="192,5,5,0" Padding="0">
+                    <Grid Margin="0,0,-2,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Background="Black" Margin="-1,-1,0,0">
+                            <TextBlock Style="{StaticResource KinectTextFormat}" Foreground="White">Volume Max Integration Weight</TextBlock>
+                        </StackPanel>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Slider Grid.Column="0"  SmallChange="10" LargeChange="50" Value="{Binding IntegrationWeight}" Minimum="1" Maximum="1000" Ticks="1 1000" Margin="5" AutomationProperties.AutomationId="VolumeIntegrationWeight"/>
+                            <TextBlock Grid.Column="1" Margin="0 0 5 0" Text="{Binding IntegrationWeight}"/>
+                        </Grid>
+
+                        <StackPanel Grid.Row="2" Background="Black" Margin="-1,0,0,0">
+                            <TextBlock Style="{StaticResource KinectTextFormat}" Foreground="White">Volume Voxels Per Meter</TextBlock>
+                        </StackPanel>
+
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Slider Grid.Column="0"  Value="{Binding VoxelsPerMeter}" Minimum="128" Maximum="768" Ticks="128 256 384 512 640 768" IsSnapToTickEnabled="True" Margin="5" ValueChanged="VolumeSettingsChanged" AutomationProperties.AutomationId="VolumeVoxelsPerMeter"/>
+                            <TextBlock Grid.Column="1"  Margin="0 0 5 0" Text="{Binding VoxelsPerMeter}"/>
+                        </Grid>
+
+                        <StackPanel Grid.Row="4" Background="Black" Margin="-1,0,0,0">
+                            <TextBlock Style="{StaticResource KinectTextFormat}" Foreground="White">Volume Voxels Resolution</TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="5" Orientation="Vertical">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"  Margin="5 0 0 0">X Axis</TextBlock>
+                                <Slider Name="VoxelsXSlider" Grid.Column="1" Value="{Binding VoxelsX}" Minimum="128" Maximum="640" Ticks="128 256 384 512 640" IsSnapToTickEnabled="True" ValueChanged="VolumeSettingsChanged" Margin="5" AutomationProperties.AutomationId="VolumeResolutionX"/>
+                                <TextBlock Grid.Column="2" Text="{Binding VoxelsX}" Margin="0 0 5 0"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="191*"/>
+                                    <ColumnDefinition Width="76*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Margin="5 0 0 0">Y Axis</TextBlock>
+                                <Slider Name="VoxelsYSlider" Grid.Column="1"  Value="{Binding VoxelsY}" Minimum="128" Maximum="640" Ticks="128 256 384 512 640" IsSnapToTickEnabled="True" ValueChanged="VolumeSettingsChanged" Margin="5" AutomationProperties.AutomationId="VolumeResolutionY" Grid.ColumnSpan="2"/>
+                                <TextBlock Grid.Column="3"  Text="{Binding VoxelsY}" Margin="0 0 5 0"/>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Margin="5 0 0 0">Z Axis</TextBlock>
+                                <Slider Name="VoxelsZSlider" Grid.Column="1"  Value="{Binding VoxelsZ}" Minimum="128" Maximum="640" Ticks="128 256 384 512 640" IsSnapToTickEnabled="True" ValueChanged="VolumeSettingsChanged" Margin="5" AutomationProperties.AutomationId="VolumeResolutionZ"/>
+                                <TextBlock Grid.Column="2" Text="{Binding VoxelsZ}" Margin="0 0 5 0"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <ListBox x:Name="viewType" Height="51" VerticalAlignment="Top" Width="112" HorizontalAlignment="Right" SelectionChanged="viewType_SelectionChanged" Margin="0,673,10,0">
+                <ListBoxItem Content="Static Kinect" IsSelected="True"/>
+                <ListBoxItem Content="Moving Kinect"/>
+            </ListBox>
+            <Button x:Name="extrasButton" Content="Toggle Extras" Margin="872,729,10,177" Click="extrasButton_Click" FontSize="12"/>
+            <CheckBox x:Name="pcdCheck" Content="PCD" Margin="717,703,0,0" Checked="pcdCheck_Checked" Unchecked="pcdCheck_Unchecked" Width="43" Height="15" VerticalAlignment="Top" HorizontalAlignment="Left" IsChecked="True"/>
+            <Button x:Name="saveButton" Content="Save Model" Margin="582,662,241,0" Click="CreateMeshButtonClick" AutomationProperties.AutomationId="CreateMesh" Height="31" VerticalAlignment="Top" IsEnabled="False"/>
+
+            <Button x:Name="converterButton" Content="Convert Mesh to PCD" HorizontalAlignment="Left" Margin="511,762,0,0" VerticalAlignment="Top" Width="169" Height="31" FontSize="12" Click="converterButton_Click" RenderTransformOrigin="0.515,0.903"/>
+            <Button x:Name="viewerButton" Content="View PCD" HorizontalAlignment="Left" Margin="685,762,0,0" VerticalAlignment="Top" Width="169" Height="31" FontSize="12" Click="viewerButton_Click"/>
+            <Button x:Name="mergeCoordinates" Content="Merge Skeleton/Body" HorizontalAlignment="Left" Margin="591,857,0,0" VerticalAlignment="Top" Width="169" Height="30" FontSize="12" Click="MergeCoordinates_Click"/>
+            <Button x:Name="filterPointCloud" Content="Filter PCD" HorizontalAlignment="Left" Margin="511,797,0,0" VerticalAlignment="Top" Width="169" Height="31" FontSize="12" Click="FilterPointCloud_Click" />
+            <Button x:Name="smootherButton" Content="Smooth PCD" HorizontalAlignment="Left" Margin="685,797,0,0" VerticalAlignment="Top" Width="169" Height="31" FontSize="12" Click="SmootherButton_Click"/>
+            <Label x:Name="label" Content="    (Recommended before merge)" Margin="511,823,319,78" Width="164" FontSize="10" Height="29" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Label x:Name="label2" Content="    (Recommended before merge)" Margin="685,823,145,78" Width="164" FontSize="10" Height="29" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+            <TextBlock HorizontalAlignment="Left" Margin="905,648,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource KinectTextFormat}" Foreground="Black">Mods</TextBlock >
+            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="26" Margin="582,698,0,0" VerticalAlignment="Top" Width="130">
+                <StackPanel Orientation="Horizontal" Margin="1,-1,-1,-1">
+                    <RadioButton x:Name="stlFormat"  Content="STL" Margin="0,5,0,0" IsChecked="True" AutomationProperties.AutomationId="STLFormat"/>
+                    <RadioButton x:Name="objFormat"  Content="OBJ" Margin="5 5 0 0" AutomationProperties.AutomationId="OBJFormat"/>
+                    <RadioButton x:Name="plyFormat"  Content="PLY" Margin="5 5 5 0" AutomationProperties.AutomationId="PLYFormat"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Viewbox>
+</Window>

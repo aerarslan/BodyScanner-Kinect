@@ -1,0 +1,68 @@
+﻿<Window x:Name="ExtrasWindow1" x:Class="BodyScanner.ExtrasWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BodyScanner"
+        mc:Ignorable="d"
+        Title="Extras" Height="860" Width="515" Closing="ExtrasWindow1_Closing" Loaded="ExtrasWindow1_Loaded" Icon="Images\extrascan.ico">
+
+    <Viewbox>
+        <Grid Margin="0,0,2,0" Height="1027" Width="552">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Margin="10,258,132,409" Background="Black" Height="360" Width="410">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Viewbox Grid.Row="1" HorizontalAlignment="Center">
+                    <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
+                </Viewbox>
+            </Grid>
+
+            <Grid Margin="10,10,135,769" Width="407">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Viewbox Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Image Name="colorStream" Source="{Binding ImageSource2}" Stretch="UniformToFill" />
+                </Viewbox>
+            </Grid>
+
+            <Grid Margin="10,657,132,10" Height="360" Width="410">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Viewbox Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Image Source="{Binding ImageSource3}" Stretch="UniformToFill" />
+                </Viewbox>
+                <TextBlock Name="skeletonStatus" FontSize="12" Background="White" Foreground="Black" Padding="10"
+                           Text="" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+            </Grid>
+
+            <Button x:Name="startSavingSkeleton" Content="Save Skeleton" HorizontalAlignment="Left" Margin="435,866,0,0" VerticalAlignment="Top" Width="107" Click="startSavingSkeleton_Click"/>
+            <Button x:Name="stopSavingSkeleton" Content="Stop Saving" HorizontalAlignment="Left" Margin="435,908,0,0" VerticalAlignment="Top" Width="107" Click="stopSavingSkeleton_Click"/>
+            <Border x:Name="skeletonMenuBorder" BorderBrush="Black" BorderThickness="2,2,0,2" HorizontalAlignment="Left" Height="146" Margin="425,658,0,0" VerticalAlignment="Top" Width="127">
+                <StackPanel HorizontalAlignment="Left" Height="146" VerticalAlignment="Top" Width="127" Margin="-2,-2,0,-2">
+                    <TextBlock  Margin="20,10,10,0" FontSize="12" Height="16"><Run Text="Start Delay"/></TextBlock>
+                    <Slider x:Name="startDelaySlider" Minimum="0" Maximum="30" IsSnapToTickEnabled="True" Margin="5,3,32,0" SmallChange="1" LargeChange="5" Height="21" Value="1" ValueChanged="startDelaySlider_ValueChanged" />
+                    <TextBlock  Margin="20,10,10,0" FontSize="12" Height="16"><Run Text="Saving Time(sec)"/></TextBlock>
+                    <Slider x:Name="savingTimeSlider" Minimum="3" Maximum="99" IsSnapToTickEnabled="True" SmallChange="3" LargeChange="10" Height="21" Margin="5,3,32,0" Value="3" ValueChanged="savingTimeSlider_ValueChanged" />
+                    <CheckBox x:Name="oneFrameStopCheck" Content="1 Frame" Checked="oneFrameStopCheck_Checked" Unchecked="oneFrameStopCheck_Unchecked" Margin="5,3,0,0"/>
+                    <CheckBox x:Name="manuelStopCheck" Content="Manuel Stop" Checked="manuelStopCheck_Checked" Unchecked="manuelStopCheck_Unchecked" Margin="5,3,0,0"/>
+
+
+                </StackPanel>
+            </Border>
+            <TextBlock x:Name="startDelaySliderTxt" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="16" FontSize="12" RenderTransformOrigin="0.526,0.458" Margin="523,0,0,324" HorizontalAlignment="Left" Width="29" Text="1"/>
+            <TextBlock x:Name="savingTimeSliderTxt" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="16" FontSize="12" RenderTransformOrigin="0.526,0.458" Margin="523,0,0,273" HorizontalAlignment="Left" Width="29" Text="3"/>
+            <CheckBox x:Name="waitMeshCheck" Content="Wait Mesh to &#xA;Save Skeleton" HorizontalAlignment="Left" Margin="458,16,0,0" VerticalAlignment="Top" Checked="waitMeshCheck_Checked" Unchecked="waitMeshCheck_Unchecked"/>
+
+        </Grid>
+    </Viewbox>
+</Window>

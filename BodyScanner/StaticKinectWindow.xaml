@@ -1,0 +1,158 @@
+﻿<Window x:Class="BodyScanner.StaticKinectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:l="clr-namespace:BodyScanner"
+        mc:Ignorable="d"
+        Title="Scanner" Height="860" Width="1000" Icon="Images\bodyscan.ico"
+        FontSize="24" Closing="Window_Closing" SizeChanged="Window_SizeChanged" IsVisibleChanged="Window_IsVisibleChanged">
+
+    <Window.Resources>
+
+        <Style x:Key="KinectTextFormat" TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+
+        <BooleanToVisibilityConverter x:Key="VcBoolVis"/>
+
+        <DoubleAnimationUsingKeyFrames x:Key="AngleAnimation" RepeatBehavior="Forever">
+            <DiscreteDoubleKeyFrame Value="0" KeyTime="0:0:0"/>
+            <LinearDoubleKeyFrame Value="360" KeyTime="0:0:5"/>
+        </DoubleAnimationUsingKeyFrames>
+    </Window.Resources>
+
+    <Viewbox>
+        <Grid Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="929"/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="CompositeHost" Background="Black" ClipToBounds="False" Margin="16,25,16,304" Height="600" Width="960" >
+                <Image Name="scanImage" x:FieldModifier="private"
+                       Stretch="Uniform"
+                       Visibility="{Binding ShowScanBitmap, Converter={StaticResource VcBoolVis}}"/>
+                <Viewport3D Visibility="{Binding ShowBodyModel}" Width="960" Height="600">
+                    <Viewport3D.Camera>
+                        <PerspectiveCamera LookDirection="0,0,1" 
+                                           UpDirection="0,1,0" 
+                                           Position="0,0,-5" 
+                                           FieldOfView="60"/>
+                    </Viewport3D.Camera>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <Model3DGroup>
+                                <DirectionalLight Color="White" Direction="3,-4,5" />
+                                <GeometryModel3D x:Name="model" x:FieldModifier="private"
+                                                 Geometry="{Binding Body3DModel}">
+                                    <GeometryModel3D.Material>
+                                        <DiffuseMaterial>
+                                            <DiffuseMaterial.Brush>
+                                                <SolidColorBrush Color="White"/>
+                                            </DiffuseMaterial.Brush>
+                                        </DiffuseMaterial>
+                                    </GeometryModel3D.Material>
+                                </GeometryModel3D>
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                </Viewport3D>
+            </Grid>
+
+            <Grid Height="245" VerticalAlignment="Top" Margin="0,659,483,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="506"/>
+                </Grid.ColumnDefinitions>
+
+                <Border BorderBrush="Black" BorderThickness="2" Margin="0,5,314,0">
+                    <Grid Margin="-2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="170"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+
+                        <Button Name="startButton"
+                    Margin="10,10,0,0"
+                    Command="{Binding StartScanningCommand}"
+                    IsDefault="True" Height="31" FontSize="12" Click="startButton_Click" Width="172" VerticalAlignment="Top" HorizontalAlignment="Left">
+                            Start Mesh
+                        </Button>
+                        <Button x:Name="stopButton" Content="Stop Integration" Margin="10,46,0,0" Height="31" RenderTransformOrigin="0.897,0.719" Click="stopButton_Click" Width="172" FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                        <CheckBox x:Name="shortScan" Content="Short Scan" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" FontSize="12" Checked="shortScan_Checked" Unchecked="shortScan_Unchecked"/>
+
+                        <StackPanel Background="Black" Margin="0,155,0,-5" Height="21">
+                            <TextBlock Style="{StaticResource KinectTextFormat}" Foreground="White">Scan Duration</TextBlock>
+                        </StackPanel>
+                        <TextBlock Grid.Column="0"  Margin="10,192,129,-37" FontSize="12" VerticalAlignment="Center" Height="16">Duration</TextBlock>
+                        <TextBlock Grid.Column="0"  Margin="28,204,150,-49" FontSize="12" VerticalAlignment="Center" Height="16">[s]</TextBlock>
+
+                        <Slider Name="scanDurationSlider" Minimum="5" Maximum="100" IsSnapToTickEnabled="True" Margin="69,192,50,-46" SmallChange="5" LargeChange="10" ValueChanged="scanDurationSlider_ValueChanged" Value="20"/>
+                        <TextBlock x:Name="scanDurationSliderTxt" HorizontalAlignment="Left" Margin="148,191,0,-36" TextWrapping="Wrap" VerticalAlignment="Top" Width="25" Height="16" FontSize="12" Text="20"/>
+
+                    </Grid>
+                </Border>
+
+                <Border BorderBrush="Black" BorderThickness="2" MinWidth="210" Margin="192,5,5,0">
+                    <Grid Margin="0,0,-2,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="43"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Background="Black" Margin="0,0,-1,23" Width="309" Height="21">
+                            <TextBlock Style="{StaticResource KinectTextFormat}" Foreground="White">Body Capture Distance</TextBlock>
+                        </StackPanel>
+
+                        <TextBlock Grid.Column="0"  Margin="157,44,21,-16" FontSize="12" VerticalAlignment="Center" Height="16" Width="130">->   1m Recommended</TextBlock>
+                        <TextBlock Grid.Column="0"  Margin="157,75,21,-47" FontSize="12" VerticalAlignment="Center" Width="130" Height="16">-> 2.5m Recommended</TextBlock>
+                        <TextBlock Grid.Column="0"  Margin="157,106,21,-78" FontSize="12" VerticalAlignment="Center" Width="130" Height="16">->  4m Recommended</TextBlock>
+
+                        <StackPanel Margin="10,40,162,-99">
+                            <RadioButton x:Name="staticKinectDistance1"  Content="0.5 to 1.5  Meter" Margin="5,5,0,0" FontSize="12" Checked="staticKinectDistance1_Checked"/>
+                            <RadioButton x:Name="staticKinectDistance2"  Content="1.5 to 3.5  Meter" Margin="5,15,0,0" IsChecked="True" FontSize="12" Checked="staticKinectDistance2_Checked"/>
+                            <RadioButton x:Name="staticKinectDistance3"  Content="  3  to  5    Meter" Margin="5,15,5,0" FontSize="12" Checked="staticKinectDistance3_Checked"/>
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Button
+                    Margin="582,0,241,237"
+                    Command="{Binding SaveModelCommand}" Height="31" VerticalAlignment="Bottom" Content="Save Model" FontSize="12"/>
+
+            <StackPanel Orientation="Horizontal" Margin="584,698,282,206" Width="128">
+                <RadioButton x:Name="stlFormat"  Content="STL" Margin="0 5 0 0" IsChecked="True" FontSize="12" Checked="stlFormat_Checked"/>
+                <RadioButton x:Name="objFormat"  Content="OBJ" Margin="5 5 0 0"  FontSize="12" Checked="objFormat_Checked"/>
+                <RadioButton x:Name="plyFormat"  Content="PLY" Margin="5 5 5 0"  FontSize="12" Checked="plyFormat_Checked"/>
+            </StackPanel>
+
+
+            <ListBox x:Name="viewType" Height="51" VerticalAlignment="Top" Width="112" HorizontalAlignment="Right" SelectionChanged="viewType_SelectionChanged" Margin="0,673,10,0" FontSize="12">
+                <ListBoxItem Content="Static Kinect" IsSelected="True"/>
+                <ListBoxItem Content="Moving Kinect"/>
+            </ListBox>
+
+            <Button x:Name="extrasButton" Content="Toggle Extras" Margin="872,729,10,177" Click="extrasButton_Click" FontSize="12"/>
+
+            <CheckBox x:Name="pcdCheck" Content="PCD" HorizontalAlignment="Left" Margin="717,703,0,0" VerticalAlignment="Top" FontSize="12" Checked="pcdCheck_Checked" Unchecked="pcdCheck_Unchecked" IsChecked="True"/>
+
+            <Button x:Name="converterButton" Content="Convert Mesh to PCD" HorizontalAlignment="Left" Margin="511,762,0,0" VerticalAlignment="Top" Width="169" Height="31" FontSize="12" Click="converterButton_Click" RenderTransformOrigin="0.515,0.903"/>
+            <Button x:Name="viewerButton" Content="View PCD" HorizontalAlignment="Left" Margin="685,762,0,0" VerticalAlignment="Top" Width="169" Height="31" FontSize="12" Click="viewerButton_Click"/>
+            <Button x:Name="mergeCoordinates" Content="Merge Skeleton/Body" HorizontalAlignment="Left" Margin="591,857,0,0" VerticalAlignment="Top" Width="169" Height="30" FontSize="12" Click="MergeCoordinates_Click"/>
+            <Button x:Name="filterPointCloud" Content="Filter PCD" HorizontalAlignment="Left" Margin="511,797,0,0" VerticalAlignment="Top" Width="169" Height="31" FontSize="12" Click="FilterPointCloud_Click" />
+            <Button x:Name="smootherButton" Content="Smooth PCD" HorizontalAlignment="Left" Margin="685,797,0,0" VerticalAlignment="Top" Width="169" Height="31" FontSize="12" Click="SmootherButton_Click"/>
+
+            <Label x:Name="label" Content="    (Recommended before merge)" Margin="511,823,319,78" Width="164" FontSize="10" Height="29" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Label x:Name="label2" Content="    (Recommended before merge)" Margin="685,823,145,78" Width="164" FontSize="10" Height="29" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+            <TextBlock HorizontalAlignment="Left" Margin="906,648,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Style="{StaticResource KinectTextFormat}" Foreground="Black">Mods</TextBlock >
+            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="26" Margin="582,698,0,0" VerticalAlignment="Top" Width="130"/>
+        </Grid>
+    </Viewbox>
+    
+</Window>
