@@ -9,14 +9,17 @@ Saving human body and coordinates of skeleton joints:
 *	Be sure extras window is opened during mesh recording.
 *	Be sure Wait Mesh to Save Skeleton check box in extras window is checked. (Default is checked)
 *	Choose the mod you want to record mesh.
-*	If you choose Static Kinect Mod:
-  *	 Check Short Scan to get 1 sec mesh.
-  *	 Be sure Scan Duration is more than 10 sec.
-  *	 Be sure you choose the right Distance.
-  *	 Stay 2.5m away from kinect (distance depands on what you choose) and click Start Mesh button.
-  *	 You can stop recording mesh manually with Stop Integration button or It will stop automatically when the duration time passes.
-  *	 After recording is done, be sure PCD checkbox is check if you want point cloud of mesh. If It is not, you will save the mesh in one of the 3d object formats you choose. Also you can manually convert 3d objects into PCD format with Convert Mesh to PCD button later.
-  *	 Click Save Model to save mesh, enter the name of skeleton.csv and the name of 3d object. 
+* If you choose Static Kinect Mod:
+  * Check Short Scan to get 1 sec mesh.
+  * Be sure Scan Duration is more than 10 sec.
+  * Be sure you choose the right Distance.
+  * Stay 2.5m away from kinect (distance depands on what you choose) and click Start Mesh button.
+  * You can stop recording mesh manually with Stop Integration button or It will stop automatically when the duration time passes.
+  * After recording is done, be sure PCD checkbox is check if you want point cloud of mesh. If It is not, you will save the mesh in one of the 3d object formats you choose. Also you can manually convert 3d objects into PCD format with Convert Mesh to PCD button later.
+  * Click Save Model to save mesh, enter the name of skeleton.csv and the name of 3d object. 
+  * Enemies gets stronger when level up. (spawn rate, movement speed)
+  * New enemies appear when level up
+ 
 *	If you choose Moving Kinect Mod:
   *	Be sure kinect sees your skeleton properly.
   *	Click Start Mesh button to see how mesh looks.
@@ -26,6 +29,7 @@ Saving human body and coordinates of skeleton joints:
   *	When you prepare a good mesh, click Stop Integration and the mesh you record will be stay without scattered.
   *	After recording is done, be sure PCD checkbox is check if you want point cloud of mesh. If It is not, you will save the mesh in one of the 3d object formats you choose. Also you can manually convert 3d objects into PCD format with Convert Mesh to PCD button later.
   *	Click Save Model to save mesh, enter the name of skeleton.csv and the name of 3d object. 
+
 
 
 # Using Convert, View, Filter, Smooth, Merge Buttons:
