@@ -17,21 +17,16 @@ Saving human body and coordinates of skeleton joints:
   * You can stop recording mesh manually with Stop Integration button or It will stop automatically when the duration time passes.
   * After recording is done, be sure PCD checkbox is check if you want point cloud of mesh. If It is not, you will save the mesh in one of the 3d object formats you choose. Also you can manually convert 3d objects into PCD format with Convert Mesh to PCD button later.
   * Click Save Model to save mesh, enter the name of skeleton.csv and the name of 3d object. 
-  * Enemies gets stronger when level up. (spawn rate, movement speed)
-  * New enemies appear when level up
- 
-*	If you choose Moving Kinect Mod:
-  *	Be sure kinect sees your skeleton properly.
-  *	Click Start Mesh button to see how mesh looks.
-  *	You can always click Start Mesh button to start the mesh from the beginning. It takes new skeleton coordinates whenever you click Start Mesh button again.
-  *	Change the parameters with sliders to find best option for you.
-  *	Be sure Integration Weight is around 300. More than 300 can cause a big data and PCD options can not handle with that big data.
-  *	When you prepare a good mesh, click Stop Integration and the mesh you record will be stay without scattered.
-  *	After recording is done, be sure PCD checkbox is check if you want point cloud of mesh. If It is not, you will save the mesh in one of the 3d object formats you choose. Also you can manually convert 3d objects into PCD format with Convert Mesh to PCD button later.
-  *	Click Save Model to save mesh, enter the name of skeleton.csv and the name of 3d object. 
-
-
-
+* If you choose Moving Kinect Mod:
+  * Be sure kinect sees your skeleton properly.
+  * Click Start Mesh button to see how mesh looks.
+  * You can always click Start Mesh button to start the mesh from the beginning. It takes new skeleton coordinates whenever you click Start Mesh button again.
+  * Change the parameters with sliders to find best option for you.
+  * Be sure Integration Weight is around 300. More than 300 can cause a big data and PCD options can not handle with that big data.
+  * When you prepare a good mesh, click Stop Integration and the mesh you record will be stay without scattered.
+  * After recording is done, be sure PCD checkbox is check if you want point cloud of mesh. If It is not, you will save the mesh in one of the 3d object formats you choose. Also you can manually convert 3d objects into PCD format with Convert Mesh to PCD button later.
+  * Click Save Model to save mesh, enter the name of skeleton.csv and the name of 3d object. 
+  
 # Using Convert, View, Filter, Smooth, Merge Buttons:
 
 * Convert Mesh to PCD: Converts 3d object into PCD. After you click the button, you have to choose the 3d object that you want to convert into PCD file. PCD format of 3d object will be saved into the same directory of 3d object.
