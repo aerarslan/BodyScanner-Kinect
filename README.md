@@ -2,6 +2,7 @@
 An app to create 3D model of a body with using Kinect. The output can be used to measure body parts.
 
 ## [Find the source code of SubPrograms from here](https://github.com/aerarslan/PCL-Filter-Merge-Smooth)
+## [Calculate Circumference of Body Parts with the Output of BodyScanner-Kinect](https://github.com/aerarslan/Body-Part-Circumference-Finder)
 
 ## HOW TO USE BODY SCANNER
 Convert, view, filter, smooth, merge features is used after a 3d scan is done and saved.
