@@ -1,5 +1,5 @@
 # BodyScanner-Kinect
-An app to create 3D model of a body with using Kinect. The output can be used to measure body parts.
+An app to create 3D model of a body with using Kinect. Contains a sub program to use point cloud library features on 3D models. The output can be used to measure body parts.
 
 ## [Source Code of SubPrograms](https://github.com/aerarslan/PCL-Filter-Merge-Smooth)
 ## [Calculate Circumference of Body Parts with the Output of BodyScanner-Kinect](https://github.com/aerarslan/Body-Part-Circumference-Finder)
