@@ -37,3 +37,5 @@ Saving human body and coordinates of skeleton joints:
 * Filter PCD: Filters a given PCD file. After you click the button, you have to choose a PCD file that you want to be filtered. Then you have to enter the name of the new filtered PCD file.
 * Smooth PCD: Smooths a given PCD file. After you click the button, you have to choose a PCD file that you want to be smoothed. Then you have to enter the name of the new smoothed PCD file.
 * Merge Skeleton/Body: Merges the saved skeleton.csv file with the saved PCD file of 3d scan. After you click the button, you have to choose a PCD file and a CSV file that is the skeleton coordinates of the PCD file. Then you have to enter the name of the new merged CSV file.
+
+![adventurer of the little town](https://user-images.githubusercontent.com/42182119/46920486-a102ff00-cff7-11e8-9c42-8cb35769d625.jpg)
